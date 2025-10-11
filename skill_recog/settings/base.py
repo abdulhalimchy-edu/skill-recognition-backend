@@ -37,6 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Project's App
+    'user',
+
+    # Third party Apps
 ]
 
 MIDDLEWARE = [
@@ -78,6 +83,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Auth model
+AUTH_USER_MODEL = "user.User"
 
 
 # Password validation
