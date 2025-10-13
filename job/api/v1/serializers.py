@@ -35,6 +35,6 @@ class SkillExtractSerializer(serializers.ModelSerializer):
 class SkillExtractionRunpodNotificationSerializer(serializers.Serializer):
     task_id = serializers.IntegerField(required=True)
     extracted_skills = serializers.ListField(
-        child=serializers.CharField(), required=False
+        child=serializers.CharField(allow_blank=True), required=False
     )
     processing_status = serializers.CharField(required=True)
