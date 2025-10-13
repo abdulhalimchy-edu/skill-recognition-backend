@@ -31,6 +31,13 @@ class Skill(models.Model):
     def __str__(self):
         return self.name
 
+    @staticmethod
+    def get_skill(name):
+        skill = Skill.objects.filter(name__iexact=name).first()
+        if skill:
+            return skill
+        return Skill.objects.create(name=name)
+
 
 class SkillExtractionInfo(models.Model):
     class ProcessingStatus(models.IntegerChoices):
