@@ -19,3 +19,9 @@ DATABASES = {
         "PORT": env("DB_PORT"),
     }
 }
+
+# CORS Settings
+CORS_ALLOW_ALL_ORIGINS = True
+
+# Allow all headers
+CORS_ALLOW_HEADERS = ['*']
