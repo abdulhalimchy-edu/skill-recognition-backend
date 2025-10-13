@@ -14,7 +14,7 @@ def run_skill_extraction(skill_extraction_info: SkillExtractionInfo):
         "input": {
             "task_id": skill_extraction_info.id,
             "sentence": skill_extraction_info.job_description,
-            "notification_url": "http://167.71.47.244/job/v1/skills/extraction-runpod-notification/"
+            "notification_url": "https://skill-recog.mooo.com/job/v1/skills/extraction-runpod-notification/"
         }
     }
 
