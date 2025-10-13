@@ -9,7 +9,7 @@ class SkillSerializer(serializers.ModelSerializer):
 
 
 class SkillExtractionInfoSerializer(serializers.ModelSerializer):
-    extracted_skills = SkillSerializer(many=True, read_only=True)
+    extracted_skills = serializers.SerializerMethodField()
     processing_status = serializers.ReadOnlyField(source="get_processing_status_display")
 
     class Meta:
@@ -23,6 +23,10 @@ class SkillExtractionInfoSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+
+    def get_extracted_skills(self, obj):
+        # Return a list of skill names
+        return [skill.name for skill in obj.extracted_skills.all()]
 
 
 class SkillExtractSerializer(serializers.ModelSerializer):
