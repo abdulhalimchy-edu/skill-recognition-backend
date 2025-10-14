@@ -4,9 +4,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from job.api.v1.serializers import SkillSerializer, SkillExtractSerializer, SkillExtractionInfoSerializer, \
-    SkillExtractionRunpodNotificationSerializer
+    SkillExtractionRunpodNotificationSerializer, JobSearchSerializer
 from job.models import Skill, SkillExtractionInfo
-from job.utils import run_skill_extraction
+from job.utils import run_skill_extraction, scrape_indeed_jobs
 
 
 class SkillListAPIView(generics.ListAPIView):
@@ -69,3 +69,44 @@ class SkillExtractionRunpodNotificationAPIView(APIView):
             skill_extraction_info.save()
 
         return Response("Okay", status=status.HTTP_200_OK)
+
+
+class MatchJobAPIView(APIView):
+    authentication_classes = []
+    permission_classes = []
+    serializer_class = JobSearchSerializer
+
+    def post(self, request):
+        serializer = JobSearchSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # Extract validated data
+        validated_data = serializer.validated_data
+        query = validated_data['query']
+        location = validated_data.get('location', 'Europe')
+        max_rows = validated_data.get('max_rows', 10)
+        job_type = validated_data.get('job_type', 'fulltime')
+        radius = validated_data.get('radius', 50)
+        sort = validated_data.get('sort', 'relevance')
+        from_days = validated_data.get('from_days', 7)
+
+        try:
+            # Call the utility function to get jobs
+            job_lists = scrape_indeed_jobs(
+                query=query,
+                location=location,
+                max_rows=max_rows,
+                job_type=job_type,
+                radius=radius,
+                sort=sort,
+                from_days=from_days
+            )
+
+            return Response(data=job_lists, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({
+                'success': False,
+                'error': 'Failed to fetch job listings',
+                'message': str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

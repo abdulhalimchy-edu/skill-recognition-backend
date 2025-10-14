@@ -43,3 +43,13 @@ class SkillExtractionRunpodNotificationSerializer(serializers.Serializer):
         child=serializers.CharField(allow_blank=True), required=False
     )
     processing_status = serializers.CharField(required=True)
+
+
+class JobSearchSerializer(serializers.Serializer):
+    query = serializers.CharField(required=True, max_length=100)
+    location = serializers.CharField(required=False, max_length=100, default="San Francisco")
+    max_rows = serializers.IntegerField(required=False, default=15, min_value=1, max_value=50)
+    job_type = serializers.CharField(required=False, default="fulltime")
+    radius = serializers.IntegerField(required=False, default=50)
+    sort = serializers.CharField(required=False, default="relevance")
+    from_days = serializers.IntegerField(required=False, default=7)
