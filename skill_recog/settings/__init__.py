@@ -1,4 +1,4 @@
-from .base import *
+from .base import env
 
 ENV_TYPE = env("ENV_TYPE")
 
